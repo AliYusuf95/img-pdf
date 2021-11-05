@@ -1,0 +1,54 @@
+//
+// Components
+//
+
+// Primer core modules
+@import '~@primer/css/base/index.scss';
+@import '~@primer/css/box/index.scss';
+@import '~@primer/css/breadcrumb/index.scss';
+@import '~@primer/css/buttons/index.scss';
+@import '~@primer/css/table-object/index.scss';
+//@import '~@primer/css/forms/index.scss';
+// Start form
+@import '~@primer/css/forms/form-control.scss';
+@import '~@primer/css/forms/form-select.scss';
+@import '~@primer/css/forms/form-group.scss';
+//@import '~@primer/css/forms/form-validation.scss';
+@import '~@primer/css/forms/input-group.scss';
+@import '~@primer/css/forms/radio-group.scss';
+// End form
+@import '~@primer/css/layout/index.scss';
+@import '~@primer/css/links/index.scss';
+@import '~@primer/css/navigation/index.scss';
+@import '~@primer/css/pagination/index.scss';
+@import '~@primer/css/tooltips/index.scss';
+@import '~@primer/css/truncate/index.scss';
+
+// Primer product specific css modules
+@import '~@primer/css/alerts/index.scss';
+@import '~@primer/css/autocomplete/index.scss';
+@import '~@primer/css/avatars/index.scss';
+@import '~@primer/css/blankslate/index.scss';
+@import '~@primer/css/branch-name/index.scss';
+@import '~@primer/css/dropdown/index.scss';
+@import '~@primer/css/header/index.scss';
+@import '~@primer/css/labels/index.scss';
+@import '~@primer/css/loaders/index.scss';
+@import '~@primer/css/markdown/index.scss';
+@import '~@primer/css/popover/index.scss';
+@import '~@primer/css/progress/index.scss';
+@import '~@primer/css/select-menu/index.scss';
+@import '~@primer/css/subhead/index.scss';
+@import '~@primer/css/timeline/index.scss';
+@import '~@primer/css/toasts/index.scss';
+
+// Primer marketing specific css modules
+@import '~@primer/css/marketing/type/index.scss';
+@import '~@primer/css/marketing/buttons/index.scss';
+@import '~@primer/css/marketing/utilities/index.scss';
+
+// Utilities always go last so that they can override components
+@import 'utilities';
+
+// Custom components
+@import 'avatar';

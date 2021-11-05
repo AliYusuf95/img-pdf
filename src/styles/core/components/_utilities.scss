@@ -1,0 +1,15 @@
+//
+// Prime utilities
+//
+@import '~@primer/css/utilities/animations.scss';
+@import '~@primer/css/utilities/borders.scss';
+@import '~@primer/css/utilities/box-shadow.scss';
+@import '~@primer/css/utilities/colors.scss';
+@import '~@primer/css/utilities/details.scss';
+@import '~@primer/css/utilities/flexbox.scss';
+@import '~@primer/css/utilities/layout.scss';
+@import '~@primer/css/utilities/margin.scss';
+@import '~@primer/css/utilities/padding.scss';
+@import '~@primer/css/utilities/typography.scss';
+// Visibility and display should always come last in the imports so that they override other utilities with !important
+@import '~@primer/css/utilities/visibility-display.scss';

@@ -1,0 +1,19 @@
+// Custom functions & mixins
+@import './core/base/functions';
+@import './core/base/mixins';
+
+// Custom variables
+@import './core/components/variables';
+
+// Prime/css initialization
+@import '~@primer/css/support/mixins/color-modes.scss';
+@import '~@primer/css/support/mixins/typography.scss';
+@import '~@primer/css/support/mixins/layout.scss';
+@import '~@primer/css/support/mixins/misc.scss';
+// themes
+@import '~@primer/css/color-modes/themes/light.scss';
+@import '~@primer/css/color-modes/themes/dark_dimmed.scss';
+@import '~@primer/css/color-modes/native.scss';
+
+// 3rd-Party plugins variables
+@import './core/vendors/plugins/variables';
