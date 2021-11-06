@@ -21,9 +21,7 @@ import {
 import './DownloadForm.scss';
 
 function DownloadForm(): JSX.Element {
-  const [bookUrl, setBookUrl] = useState(
-    'https://www.myeschoolhome.com/mEBook.html?name=099f89c2020b0fec86acad01216fc277e93cf0bc93ec95e5cc6766c11f48ee72',
-  );
+  const [bookUrl, setBookUrl] = useState('');
   const [error, setError] = useState(undefined);
   const [progressState, setProgressState] = useState('init');
   const [progress, setProgress] = useState(0);
