@@ -33,6 +33,8 @@ function DownloadForm(): JSX.Element {
       enabled: false,
       refetchOnWindowFocus: false,
       refetchInterval: false,
+      retry: 1,
+      retryDelay: 0,
       onSuccess: async (bookConfig) => {
         setBookInfo(bookConfig);
       },

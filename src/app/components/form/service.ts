@@ -23,8 +23,17 @@ export interface BookConfig {
 }
 
 export async function getBookInfo(stringUrl: string): Promise<BookConfig> {
-  const url = new URL(stringUrl);
-  if (url.host !== 'www.myeschoolhome.com' || url.pathname !== '/mEBook.html') {
+  const url = new URL(stringUrl.trim());
+  const allowedPaths = ['/eBook.html', '/mEBook.html'].map((s) =>
+    s.toLowerCase(),
+  );
+  const allowedHosts = ['www.myeschoolhome.com', 'myeschoolhome.com'].map((s) =>
+    s.toLowerCase(),
+  );
+  if (
+    !allowedHosts.includes(url.host.toLowerCase()) ||
+    !allowedPaths.includes(url.pathname.toLowerCase())
+  ) {
     throw new Error('Not supported book url');
   }
   const bookId = url.searchParams.get('name');
