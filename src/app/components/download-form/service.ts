@@ -90,10 +90,10 @@ export async function getBookImages(
     await caches.open(CACHE_KEY).then(async (cache) => {
       await cache.addAll(images);
       callback?.(getProgress(images.length));
-      const promises = (await cache.keys()).map((key, index) =>
-        cache.match(key).then((data) => {
+      const promises = images.map((url, index) =>
+        cache.match(url).then((data) => {
           if (!data) {
-            throw new Error(`Missing image, Url: ${key.url}`);
+            throw new Error(`Missing image, Url: ${url}`);
           }
           callback?.(getProgress());
           return new Promise<{ data: ArrayBuffer; sort: number }>(
