@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { PDFDocument } from 'pdf-lib';
+import type { PDFImage } from 'pdf-lib';
 
 const CACHE_KEY = 'images';
 
@@ -84,59 +85,72 @@ export async function getBookImages(
     images.push(imageURLGen(i));
   }
 
-  const result: Promise<ArrayBuffer>[] = [];
+  const result: Promise<{ data: ArrayBuffer; sort: number }>[] = [];
   if ('caches' in window) {
     await caches.open(CACHE_KEY).then(async (cache) => {
       await cache.addAll(images);
       callback?.(getProgress(images.length));
-      const promises = (await cache.keys()).map((key) =>
+      const promises = (await cache.keys()).map((key, index) =>
         cache.match(key).then((data) => {
           if (!data) {
             throw new Error(`Missing image, Url: ${key.url}`);
           }
           callback?.(getProgress());
-          return data.arrayBuffer();
+          return new Promise<{ data: ArrayBuffer; sort: number }>(
+            (resolve, reject) => {
+              data
+                .arrayBuffer()
+                .then((arr) => {
+                  resolve({ data: arr, sort: index });
+                })
+                .catch(reject);
+            },
+          );
         }),
       );
       result.push(...promises);
     });
   } else {
-    const promises = images.map((src) => {
-      return new Promise<ArrayBuffer>((resolve, reject) => {
-        const canvas = document.createElement('canvas');
-        const img = new Image();
-        img.src = src;
-        img.onload = () => {
-          callback?.(getProgress());
-          canvas.width = img.naturalWidth;
-          canvas.height = img.naturalHeight;
-          const ctx = canvas.getContext('2d');
-          ctx?.drawImage(img, 0, 0);
-          canvas.toBlob((b) => {
-            if (b) {
-              b.arrayBuffer()
-                .then((arr) => {
-                  callback?.(getProgress());
-                  resolve(arr);
-                })
-                .catch(reject);
-            } else {
-              reject(new Error(`Empty image blob, Url: ${src}`));
-            }
+    const promises = images.map((src, index) => {
+      return new Promise<{ data: ArrayBuffer; sort: number }>(
+        (resolve, reject) => {
+          const canvas = document.createElement('canvas');
+          const img = new Image();
+          img.src = src;
+          img.onload = () => {
+            callback?.(getProgress());
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            const ctx = canvas.getContext('2d');
+            ctx?.drawImage(img, 0, 0);
+            canvas.toBlob((b) => {
+              if (b) {
+                b.arrayBuffer()
+                  .then((arr) => {
+                    callback?.(getProgress());
+                    resolve({ data: arr, sort: index });
+                  })
+                  .catch(reject);
+              } else {
+                reject(new Error(`Empty image blob, Url: ${src}`));
+              }
+              canvas.remove();
+            }, 'image/jpeg');
+          };
+          img.crossOrigin = 'anonymous';
+          img.onerror = (e) => {
             canvas.remove();
-          }, 'image/jpeg');
-        };
-        img.crossOrigin = 'anonymous';
-        img.onerror = (e) => {
-          canvas.remove();
-          reject(e);
-        };
-      });
+            reject(e);
+          };
+        },
+      );
     });
     result.push(...promises);
   }
 
-  return Promise.all(result);
+  return Promise.all(result).then((res) =>
+    res.sort((a, b) => (a.sort > b.sort ? 1 : -1)).map((item) => item.data),
+  );
 }
 
 export async function createPDFFromImages(
@@ -150,10 +164,19 @@ export async function createPDFFromImages(
     return Math.floor(currentProgress / processSteps);
   };
   const pdfDoc = await PDFDocument.create();
-  const promises = images.map((image) => {
-    return pdfDoc.embedJpg(image);
+  const promises = images.map((image, index) => {
+    return new Promise<{ data: PDFImage; sort: number }>((resolve, reject) => {
+      pdfDoc
+        .embedJpg(image)
+        .then((pdfImage) => {
+          resolve({ data: pdfImage, sort: index });
+        })
+        .catch(reject);
+    });
   });
-  const pdfImages = await Promise.all(promises);
+  const pdfImages = (await Promise.all(promises))
+    .sort((a, b) => (a.sort > b.sort ? 1 : -1))
+    .map((item) => item.data);
   callback?.(getProgress(pdfImages.length));
   pdfImages.forEach((image) => {
     const page = pdfDoc.addPage([image.width, image.height]);

@@ -1,7 +1,7 @@
 import React, { MouseEvent, useState } from 'react';
 import { Box, Button, ButtonDanger, Dialog, Text } from '@primer/components';
 import { TrashIcon, ZapIcon } from '@primer/octicons-react';
-import { clearCache } from '../form/service';
+import { clearCache } from '../download-form/service';
 
 export function ClearCache(): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);

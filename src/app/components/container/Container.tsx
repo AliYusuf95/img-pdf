@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@primer/components';
-import DownloadForm from '../form/DownloadForm';
+import DownloadForm from '../download-form/DownloadForm';
 import { ClearCache } from './ClearCache';
 
 function Container(): JSX.Element {
