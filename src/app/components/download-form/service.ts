@@ -11,6 +11,7 @@ interface BookInfoResponse {
 
 export interface BookConfig {
   URL: URL;
+  accessibleBook: boolean;
   HomeURL: string;
   RightToLeft: string;
   appLogoIcon: string;
@@ -60,7 +61,7 @@ export async function getBookInfo(stringUrl: string): Promise<BookConfig> {
   } catch (e: unknown) {
     throw new Error("Can't parse response data.");
   }
-  return { ...data, URL: url };
+  return { ...data, URL: url, accessibleBook: !!response.data?.accessibleBook };
 }
 
 export function getImageURL(bookConfig: BookConfig) {
@@ -70,6 +71,7 @@ export function getImageURL(bookConfig: BookConfig) {
 
 export async function getBookImages(
   bookConfig: BookConfig,
+  { firstPage, lastPage }: { firstPage: number; lastPage: number },
   callback?: (progress: number) => void,
 ): Promise<ArrayBuffer[]> {
   let currentProgress = 0;
@@ -81,7 +83,7 @@ export async function getBookImages(
 
   const imageURLGen = getImageURL(bookConfig);
   const images: string[] = [];
-  for (let i = bookConfig.startPage; i <= bookConfig.totalPageCount; i++) {
+  for (let i = firstPage; i <= lastPage; i++) {
     images.push(imageURLGen(i));
   }
 

@@ -2,3 +2,11 @@
   transition: 1s ease;
   transition-delay: 0.2s;
 }
+
+.form-group.errored {
+  margin-bottom: 40px;
+}
+
+.form-group.errored + .form-group.errored {
+  margin-top: 40px;
+}
